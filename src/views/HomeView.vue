@@ -179,7 +179,7 @@
                   هر روز فقط یک شانس داری پس اگر امروز شانس باهات یار نبود فردا بازم بیا!
                 </h5>
                 <label for="mobile">شماره موبایل</label>
-                <input type="text" id="mobile" v-model="mobile" class="form-control en mb-3 " placeholder="09...">
+                <input type="number" id="mobile" v-model="mobile" class="form-control en mb-3 " placeholder="09...">
                 <button class="btn btn-success btn-sm" @click.prevent="register">دریافت کد تایید</button>
                 <ul class="mt-2">
                   <li v-for="error in mobileErrors" id="mobileMessage" class="errorMessage small">{{ error }}</li>
