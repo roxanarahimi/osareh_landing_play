@@ -179,14 +179,14 @@
                   هر روز فقط یک شانس داری پس اگر امروز شانس باهات یار نبود فردا بازم بیا!
                 </h5>
                 <label for="mobile">شماره موبایل</label>
-                <input type="number" id="mobile" v-model="mobile" class="form-control en mb-3 " placeholder="09...">
+                <input type="text" id="mobile" v-model="mobile" class="form-control en mb-3 " placeholder="09...">
                 <button class="btn btn-success btn-sm" @click.prevent="register">دریافت کد تایید</button>
                 <ul class="mt-2">
                   <li v-for="error in mobileErrors" id="mobileMessage" class="errorMessage small">{{ error }}</li>
                 </ul>
               </div>
               <div class="confirm d-none">
-                <small class="small">mobile</small>
+                <small class="small">{{ mobile }}</small><br>
                 <small class="small">لطفا کد تاییدی که از طریق پیامک دریافت کردید را وارد کنید:</small>
                 <div class="d-flex mb-3" dir="ltr">
                   <input type="text" id="code1" @input="autoTab($event)" minLength="1" maxLength="1" min="0" max="9"
