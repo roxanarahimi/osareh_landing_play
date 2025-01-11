@@ -367,8 +367,6 @@ export default {
           document.getElementById('resend').classList.remove('disabledResend')
 
       },11000);
-
-
     }
     const autoTab = (e) => {
       let code =
