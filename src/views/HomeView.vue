@@ -8,7 +8,7 @@
               <h1 class="align-self-end">خـریــــد مستقیم</h1>
             </div>
             <div class="col-8">
-              <h1 class="text-light text-center mx-auto mt-5" style="font-size: 55px; text-align: justify">
+              <h1 class="text-light text-center mx-auto mt-5 mtitle" >
                 بــرای شـرکــــت در مســـابقـه<br>
                 وارد گردونـه شـانس شـوید<br>
                 و کد تخفیف دریافـت کنید!</h1>
@@ -56,7 +56,7 @@
       </div>
       <div class="col-4 h-100 py-5 text-center">
         <img src="/img/logo.png" class="d-block mx-auto" width="150" alt="">
-        <img src="/img/txt.png" class="d-block mx-auto" width="400" alt="">
+        <img src="/img/txt.png" class="d-block mx-auto txtt"  alt="">
         <div class="text-center d-flex justify-content-center">
           <div class="text-center" style="width: 400px">
             <img src="/img/pic.png" class="mx-auto w-100" alt="">
