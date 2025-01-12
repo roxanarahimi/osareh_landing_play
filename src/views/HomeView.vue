@@ -178,7 +178,7 @@
                 <h5 class="text-justify">برای شرکت در گردونه شماره موبایلت رو وارد کن.
                   هر روز فقط یک شانس داری پس اگر امروز شانس باهات یار نبود فردا بازم بیا!
                 </h5>
-                <label for="mobile">شماره موبایل</label>
+                <label for="mobile" class="mt-3 mb-1">شماره موبایل</label>
                 <input type="text" id="mobile" v-model="mobile" class="form-control en mb-3 " placeholder="09...">
                 <button class="btn btn-success btn-sm" @click.prevent="register">دریافت کد تایید</button>
                 <ul class="mt-2">
@@ -186,8 +186,8 @@
                 </ul>
               </div>
               <div class="confirm d-none">
-                <small class="small">{{ mobile }}</small><br>
-                <small class="small">لطفا کد تاییدی که از طریق پیامک دریافت کردید را وارد کنید:</small>
+                <small class="d-block">{{ mobile }}</small>
+                <small class="d-block mb-3">لطفا کد تاییدی که از طریق پیامک دریافت کردید را وارد کنید:</small>
                 <div class="d-flex mb-3" dir="ltr">
                   <input type="text" id="code1" @input="autoTab($event)" minLength="1" maxLength="1" min="0" max="9"
                          class="form-control en text-center">
@@ -198,13 +198,9 @@
                   <input type="text" id="code4" @input="autoTab($event)" minLength="1" maxLength="1" min="0" max="9"
                          class="form-control en me-2 text-center">
                 </div>
-                <button class="btn btn-success btn-sm" @click="confirm">تایید</button>
+                <li v-if="message" id="verifyMessage" class="errorMessage small">{{ message }}</li>
                 <div class="col-12 d-flex justify-content-between mt-3 small ">
-                  <!--              <button  class="btn btn-sm btn-dark"  @click="getCode" >دریافت کد تایید</button>-->
-<!--                  <p @click="editNumber" class="text-info small cursor-pointer">-->
-<!--                    ویرایش شماره-->
-<!--                  </p>-->
-                  <p  id="resend" @click="resend" class=" disabledResend small">
+                  <p id="resend" @click="resend" class=" disabledResend small">
                     ارسال مجدد کد
                     <span id="time">{{ time }}</span>
                   </p>
@@ -228,13 +224,7 @@
 
               </div>
               <div class="result d-none text-justify" style="font-family: YekanBakhExtraBold;">
-                <h4>
-                  برنده شدی!
-                </h4>
-                <h5>
-                  با استفاده از کد تخفیف 4517894156 میتونی از این پلتفرم ها خرید کنی!
-                </h5>
-
+                <h5 v-for="res in result">{{res}}</h5>
               </div>
 
             </div>
@@ -263,6 +253,14 @@ export default {
 
   setup() {
 
+
+    const apiUrl = 'https://whl.webagent.ir';
+    // const apiUrl = 'http://localhost:8000';
+    const errors = ref([]);
+    const message = ref();
+    const mobile = ref();
+    const result = ref();
+    const time = ref(10);
     onMounted(() => {
       document.getElementById("mobile").value = '';
       document.getElementById("code1").value = '';
@@ -279,7 +277,6 @@ export default {
     const mobileErrors = ref([]);
     const register = () => {
       mobileErrors.value = [];
-      console.log(mobileErrors.value);
       let mobile = document.querySelector('#mobile').value;
       if (mobile.length == 0) {
         mobileErrors.value.push('لطفا شماره موبایل خود را وارد کنید');
@@ -291,9 +288,14 @@ export default {
           mobileErrors.value.push('شماره موبایل باید 11 رقم باشد.');
         }
         if (mobile.startsWith('09') && mobile.length == 11) {
-          document.querySelector('.register').classList.add('d-none');
-          document.querySelector('.confirm').classList.remove('d-none');
-          counter();
+          axios.post(apiUrl + '/api/register', {mobile: mobile})
+              .then((res) => {
+                if (res.status === 200) {
+                  getCode();
+                }
+              }).catch((err) => {
+            console.error(err);
+          })
         }
       }
 
@@ -302,36 +304,24 @@ export default {
     const getCode = () => {
       document.getElementById('resend').classList.add('disabledResend');
       counter();
-
-        axios.post(apiUrl + '/api/otp/mobile', {
-          mobile: document.getElementById('mobile').value,
-        }, {progress: false})
-            .then((res) => {
-              if (res.status === 200) {
-                document.getElementById('mobileForm').classList.add('d-none');
-                document.getElementById('codeForm').classList.remove('d-none');
-              } else {
-                // message.value = res;
-                console.log(res)
-              }
-            })
-            .then(() => {
-              counter();
-                document.getElementById('resend').classList.add('disabledResend')
-            })
-            .catch((err) => {
-              message.value = err.response.data.message;
-            })
-      }
-
-
-
-    const apiUrl = ref('');
-    const errors = ref([]);
-    const message = ref([]);
-    const mobile = ref();
-    const time = ref(10);
-
+      axios.post(apiUrl + '/api/otp/mobile', {mobile: mobile.value})
+          .then((res) => {
+            if (res.status === 200) {
+              document.querySelector('.register').classList.add('d-none');
+              document.querySelector('.confirm').classList.remove('d-none');
+            } else {
+              // message.value = res;
+              console.log(res)
+            }
+          })
+          .then(() => {
+            counter();
+            document.getElementById('resend').classList.add('disabledResend')
+          })
+          .catch((err) => {
+            message.value = err.response.data.message;
+          })
+    }
     const editNumber = () => {
       mobile.value = '';
       document.querySelector('.register').classList.remove('d-none');
@@ -363,10 +353,10 @@ export default {
       }, 1000);
 
       time.value = 0;
-      setTimeout(()=>{
-          document.getElementById('resend').classList.remove('disabledResend')
+      setTimeout(() => {
+        document.getElementById('resend').classList.remove('disabledResend')
 
-      },11000);
+      }, 11000);
     }
     const autoTab = (e) => {
       let code =
@@ -376,25 +366,17 @@ export default {
           document.getElementById("code4").value;
 
       if (code.length === 4) {
-
-        axios.post(apiUrl + '/api/mobile/login', {
+        axios.post(apiUrl + '/api/mobile/verify', {
           mobile: document.getElementById('mobile').value,
-          scope: 'user',
-          password: document.getElementById("code1").value + document.getElementById("code2").value + document.getElementById("code3").value + document.getElementById("code4").value
+          code: code
         })
             .then((res) => {
               if (res.status === 200) {
-                localStorage.setItem('user', JSON.stringify(res.data.user))
-                localStorage.setItem('token', JSON.stringify(res.data.access_token))
-                localStorage.setItem('scope', JSON.stringify(res.data.scope))
-                localStorage.setItem('expire', JSON.stringify(res.data.expire));
-                console.log(localStorage)
-                window.location = '/';
-              } else {
-                console.log(res)
+                // localStorage.setItem('mobile', JSON.stringify(mobile.value))
+                confirm();
               }
             }).catch((err) => {
-          message.value = err.response.data.message;
+          message.value = 'کد اشتباه است.';
         })
 
       }
@@ -406,10 +388,15 @@ export default {
     const confirm = () => {
       document.querySelector('.confirm').classList.add('d-none');
       document.querySelector('.luck').classList.remove('d-none');
-
     }
     const play = () => {
       document.querySelector('.ww').classList.add('play');
+      axios.post(apiUrl + '/api/play', {mobile: mobile.value})
+          .then((response) => {
+            result.value = response.data.message;
+          }).catch((err) => {
+        message.value = err.response.data.message;
+      })
       setTimeout(() => {
         document.querySelector('.luck').style.transform = 'scale(0,0)';
       }, 7000);
@@ -425,7 +412,7 @@ export default {
     return {
       register, confirm, play, mobileErrors,
       editNumber, getCode, resend, counter, autoTab,
-      mobile, message, time, errors
+      mobile, message, time, errors, result
     }
   }
 }
