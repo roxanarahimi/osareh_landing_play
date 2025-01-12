@@ -18,11 +18,13 @@ body {
   margin: 0 auto;
 }
 .bg{
-  background-image: linear-gradient(to right, #700608, #A50C11 , #A50C11 10%, #ab8c00);
+  /*background-image: linear-gradient(to right, #700608, #A50C11 , #A50C11 10%, #ab8c00);*/
+  background-color: #bb0f14;
 
 }
 .bgM{
-  background-image: linear-gradient(to bottom, #700608, #A50C11, #A50C11 10%, #ab8c00   );
+  /*background-image: linear-gradient(to bottom, #700608, #A50C11, #A50C11 10%, #ab8c00   );*/
+  background-color: #bb0f14;
 
 }
 

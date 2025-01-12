@@ -180,7 +180,10 @@
                 </h5>
                 <label for="mobile" class="mt-3 mb-1">شماره موبایل</label>
                 <input type="text" id="mobile" v-model="mobile" class="form-control en mb-3 " placeholder="09...">
-                <button class="btn btn-success btn-sm" @click.prevent="register">دریافت کد تایید</button>
+                <button id="register-btn" class="btn btn-success px-4" @click.prevent="register">
+                  دریافت کد تایید
+                  <div id="loader" class="spinner-border spinner-border-sm text-light d-none" role="status"></div>
+                </button>
                 <ul class="mt-2">
                   <li v-for="error in mobileErrors" id="mobileMessage" class="errorMessage small">{{ error }}</li>
                 </ul>
@@ -288,6 +291,8 @@ export default {
           mobileErrors.value.push('شماره موبایل باید 11 رقم باشد.');
         }
         if (mobile.startsWith('09') && mobile.length == 11) {
+          document.querySelector('#register-btn').setAttribute('disabled','disabled');
+          document.querySelector('#loader').classList.remove('d-none');
           axios.post(apiUrl + '/api/register', {mobile: mobile})
               .then((res) => {
                 if (res.status === 200) {
@@ -371,12 +376,23 @@ export default {
           code: code
         })
             .then((res) => {
+              console.log(res)
+
               if (res.status === 200) {
-                // localStorage.setItem('mobile', JSON.stringify(mobile.value))
-                confirm();
+                if (res.data.status2 === 422) {
+                  result.value = res.data.message;
+                  document.querySelector('.confirm').classList.add('d-none');
+                  document.querySelector('.result').classList.remove('d-none');
+                  setTimeout(() => {
+                    document.querySelector('.result').style.transform = 'scale(1,1)';
+                  }, 1000);
+                }else{
+                  confirm();
+                }
               }
+
             }).catch((err) => {
-          message.value = 'کد اشتباه است.';
+            message.value = 'کد اشتباه است.';
         })
 
       }
