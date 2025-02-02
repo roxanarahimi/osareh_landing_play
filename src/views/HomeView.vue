@@ -407,7 +407,7 @@ export default {
     }
     const play = () => {
       document.querySelector('.ww').classList.add('play');
-      axios.post(apiUrl + '/api/play', {mobile: mobile.value})
+      axios.post(apiUrl + '/api/play', {mobile: mobile.value,type: 'osareh'})
           .then((response) => {
             result.value = response.data.message;
           }).catch((err) => {
