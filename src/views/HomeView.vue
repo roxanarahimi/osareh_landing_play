@@ -257,9 +257,8 @@ export default {
   setup() {
 
 
-    const apiUrl = 'https://whl.webagent.ir';
-    // const apiUrl = 'http://localhost:8000';
-    // const apiUrl = 'http://188.121.101.215:8083';
+    const apiUrl = 'https://dev-amadeh.ir:8085';
+
     const errors = ref([]);
     const message = ref();
     const mobile = ref();
