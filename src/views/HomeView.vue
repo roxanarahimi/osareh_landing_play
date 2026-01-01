@@ -257,7 +257,7 @@ export default {
   setup() {
 
 
-    const apiUrl = 'https://dev-amadeh.ir:8085';
+    const apiUrl = 'https://wheel.dev-amadeh.ir';
 
     const errors = ref([]);
     const message = ref();
